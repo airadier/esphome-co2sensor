@@ -51,20 +51,18 @@ sensor:
 i2c:
   sda: D1
   scl: D2
+  frequency: 800kHz
 
 font:
+  - file: "gfonts://Roboto"
+    id: small
+    size: 16
+  - file: "gfonts://Roboto@Bold"
+    id: bold
+    size: 24
   - file: 'fonts/SourceSansPro-Light.ttf'
     id: font1
-    size: 16
-  - file: 'fonts/SourceSansPro-Light.ttf'
-    id: font2
-    size: 26
-  - file: 'fonts/materialdesignicons-webfont.ttf'
-    id: font3
-    size: 18
-  - file: 'fonts/materialdesignicons-webfont.ttf'
-    id: font4
-    size: 40
+    size: 14
 
 time:
   - platform: homeassistant
@@ -75,7 +73,9 @@ display:
     model: "SSD1306 128x64"
     reset_pin: D0
     address: 0x3C
+    update_interval: 1s
     lambda: |-
-      it.printf(0, 0, id(font1), "CO2: %.0f ppm", id(co2ppm).state);
-      it.strftime(64, 64, id(font1), TextAlign::BASELINE_CENTER, "%H:%M:%S", id(homeassistant_time).now());
+      it.printf(64, 2, id(small),  TextAlign::TOP_CENTER, "CO2 PPM");
+      it.printf(64, 32, id(bold), TextAlign::CENTER, "%.0f", id(co2ppm).state);
+      it.strftime(64, 62, id(font1), TextAlign::BASELINE_CENTER, "%H:%M:%S", id(homeassistant_time).now());
 
