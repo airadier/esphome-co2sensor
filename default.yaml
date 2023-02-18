@@ -1,0 +1,76 @@
+esphome:
+  name: esphome-co2
+
+esp8266:
+  board: nodemcuv2
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  password: ""
+
+wifi:
+  fast_connect: true
+  ssid: "<SSID>"
+  password: "<PASS>"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esphome Fallback Hotspot"
+    password: "<PASS>"
+
+captive_portal:
+
+web_server:
+  port: 80
+
+# Example configuration entry
+uart:
+  rx_pin: GPIO14
+  tx_pin: GPIO12
+  baud_rate: 9600
+
+sensor:
+  - platform: mhz19
+    co2:
+      name: "CO2 Value"
+      id: co2ppm
+    temperature:
+      name: "MH-Z19 Temperature"
+    update_interval: 30s
+    automatic_baseline_calibration: true
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    update_interval: 30s
+
+i2c:
+  sda: D1
+  scl: D2
+
+font:
+  - file: 'fonts/SourceSansPro-Light.ttf'
+    id: font1
+    size: 16
+  - file: 'fonts/SourceSansPro-Light.ttf'
+    id: font2
+    size: 26
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: font3
+    size: 18
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: font4
+    size: 40
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    reset_pin: D0
+    address: 0x3C
+    lambda: |-
+      it.printf(0, 0, id(font1), "CO2: %.0f ppm", id(co2ppm).state);
+
